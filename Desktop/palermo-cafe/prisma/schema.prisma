@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// User & Authentication
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          String    @default("editor") // admin | editor
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  blogPosts     BlogPost[]
+}
+
+// ============================================
+// Products & Menu
+// ============================================
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  category    String   // sandwiches | desayunos | bebidas | postres
+  image       String?
+  available   Boolean  @default(true)
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// Locations
+// ============================================
+
+model Location {
+  id        String  @id @default(cuid())
+  name      String
+  address   String
+  district  String
+  phone     String
+  hours     String
+  mapUrl    String?
+  lat       Float?
+  lng       Float?
+  order     Int     @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// Reservations
+// ============================================
+
+model Reservation {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  guests    Int
+  date      String
+  time      String
+  message   String?
+  status    String   @default("pending") // pending | confirmed | cancelled
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// Blog
+// ============================================
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String
+  image       String?
+  author      String   @default("Palermo Café")
+  published   Boolean  @default(false)
+  tags        String?
+  metaTitle   String?
+  metaDesc    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+// ============================================
+// Contact Messages
+// ============================================
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// Newsletter Subscribers
+// ============================================
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
