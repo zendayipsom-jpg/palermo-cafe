@@ -13,12 +13,19 @@ import { Redis } from "@upstash/redis";
 // Determinar si Upstash está configurado
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-const USE_UPSTASH = UPSTASH_URL && UPSTASH_TOKEN;
 
-// Upstash Redis client (solo si está configurado)
-const redis = USE_UPSTASH
-  ? new Redis({ url: UPSTASH_URL!, token: UPSTASH_TOKEN! })
-  : null;
+// Upstash Redis client (solo si está configurado y válido)
+let redis: Redis | null = null;
+let USE_UPSTASH = false;
+
+try {
+  if (UPSTASH_URL && UPSTASH_TOKEN && UPSTASH_URL.startsWith("https://")) {
+    redis = new Redis({ url: UPSTASH_URL, token: UPSTASH_TOKEN });
+    USE_UPSTASH = true;
+  }
+} catch {
+  console.warn("[SECURITY] Upstash Redis no configurado correctamente. Usando rate limiting en memoria.");
+}
 
 // Rate limiters para diferentes endpoints (Upstash)
 const upstashLimiters = USE_UPSTASH
