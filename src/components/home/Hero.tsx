@@ -107,11 +107,11 @@ export default function Hero() {
           className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-white/[0.07] backdrop-blur-md rounded-full border border-white/[0.12] mb-6 sm:mb-10"
         >
           <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse" />
-          <span className="text-white/70 text-[10px] sm:text-xs font-medium tracking-[0.2em] sm:tracking-[0.3em] uppercase">
+          <span className="text-white text-[10px] sm:text-xs font-medium tracking-[0.2em] sm:tracking-[0.3em] uppercase">
             Desde 1974
           </span>
-          <span className="w-px h-3 bg-white/20" />
-          <span className="text-white/70 text-[10px] sm:text-xs font-medium tracking-[0.2em] sm:tracking-[0.3em] uppercase">
+          <span className="w-px h-3 bg-white/40" />
+          <span className="text-white text-[10px] sm:text-xs font-medium tracking-[0.2em] sm:tracking-[0.3em] uppercase">
             Tradición y Sabor
           </span>
         </motion.div>
@@ -146,7 +146,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-2xl mx-auto mb-3 sm:mb-4 font-display italic px-2"
+          className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-3 sm:mb-4 font-display italic px-2"
         >
           Más de 50 años uniendo amigos con tradición y sabor
         </motion.p>
@@ -156,7 +156,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.3 }}
-          className="text-xs sm:text-sm md:text-base text-white/40 max-w-lg mx-auto mb-8 sm:mb-14 tracking-wide px-2"
+          className="text-xs sm:text-sm md:text-base text-white/60 max-w-lg mx-auto mb-8 sm:mb-14 tracking-wide px-2"
         >
           Los mejores sándwiches artesanales de Lima. Ingredientes frescos,
           recetas tradicionales y el calor de siempre.
