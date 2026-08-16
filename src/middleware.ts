@@ -55,11 +55,11 @@ export async function middleware(request: NextRequest) {
     ].join("; ");
     response.headers.set("Content-Security-Policy", csp);
   } else {
-    // Production: Strict CSP
+    // Production: Strict CSP (with allowances for Framer Motion)
     const csp = [
       "default-src 'self'",
-      "script-src 'self' https://www.googletagmanager.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  // unsafe-inline for Framer Motion
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com",  // 'unsafe-eval' needed for Framer Motion animations
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  // 'unsafe-inline' for Framer Motion styles
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://images.unsplash.com https://images.pexels.com https://maps.googleapis.com",
       "connect-src 'self' https://maps.googleapis.com",
