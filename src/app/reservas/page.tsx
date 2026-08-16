@@ -200,6 +200,15 @@ export default function ReservasPage() {
                 onSubmit={handleSubmit}
                 className="bg-card rounded-2xl sm:rounded-3xl shadow-xl border border-border/50 p-5 sm:p-8 md:p-10 space-y-4 sm:space-y-6"
               >
+                {/* Honeypot — hidden from humans, bots auto-fill it */}
+                <input
+                  type="text"
+                  name="website_url"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute opacity-0 pointer-events-none w-0 h-0"
+                />
                 <div className="text-center mb-6 sm:mb-8">
                   <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-1.5 sm:mb-2">
                     Datos de la Reserva

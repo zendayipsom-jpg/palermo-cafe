@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcryptjs";
+import { randomBytes } from "crypto";
 
 const adapter = new PrismaPg({
   connectionString: process.env["DATABASE_URL"]!,
@@ -14,21 +15,29 @@ async function main() {
   // ============================================
   // Create Admin User
   // ============================================
-  // ⚠️ SECURITY: Contraseña generada aleatoriamente. Cambiar después del primer login.
-  const adminPassword = await hash("Be#yA7Vj!BBRBe9df69o", 12);
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@palermocafe.pe";
+  let adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    adminPassword = randomBytes(16).toString("base64url");
+    console.log("⚠️  No ADMIN_PASSWORD set. Generated random password:");
+    console.log(`🔐 Admin password: ${adminPassword}`);
+    console.log("⚠️  GUARDA ESTA CONTRASEÑA. Cámbiala después del primer login.");
+  }
+
+  const hashedPassword = await hash(adminPassword, 12);
+
   const admin = await prisma.user.upsert({
-    where: { email: "admin@palermocafe.pe" },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: "admin@palermocafe.pe",
+      email: adminEmail,
       name: "Administrador",
-      password: adminPassword,
+      password: hashedPassword,
       role: "admin",
     },
   });
   console.log("✅ Admin user created:", admin.email);
-  console.log("🔐 Admin password: Be#yA7Vj!BBRBe9df69o");
-  console.log("⚠️  Cambia esta contraseña después del primer login en /auth/login");
 
   // ============================================
   // Create Products

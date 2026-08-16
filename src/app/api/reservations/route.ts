@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { reservationSchema } from "@/lib/validations";
-import { checkRateLimit, logSecurityEvent, getClientIp, detectInjectionAttempts, sanitizeInput } from "@/lib/security";
+import { checkRateLimit, logSecurityEvent, getClientIp, detectInjectionAttempts, sanitizeInput, checkHoneypot } from "@/lib/security";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -66,6 +66,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    // SECURITY: Honeypot check — silently reject bots
+    if (!checkHoneypot(body)) {
+      return NextResponse.json(
+        { success: true, data: { id: "honeypot" } },
+        { status: 201 }
+      );
+    }
 
     // SECURITY: Check for injection attempts
     const bodyString = JSON.stringify(body);

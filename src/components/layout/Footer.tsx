@@ -113,6 +113,15 @@ export default function Footer() {
               onSubmit={handleSubscribe}
               className="flex w-full md:w-auto gap-2"
             >
+              {/* Honeypot — hidden from humans, bots auto-fill it */}
+              <input
+                type="text"
+                name="website_url"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute opacity-0 pointer-events-none w-0 h-0"
+              />
               <Input
                 type="email"
                 placeholder="Tu correo electrónico"

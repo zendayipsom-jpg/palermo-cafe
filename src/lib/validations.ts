@@ -46,6 +46,8 @@ export const reservationSchema = z.object({
   time: z.string().min(1, "La hora es requerida"),
   message: z.string().max(500, "El mensaje no puede exceder 500 caracteres").optional(),
   location: z.string().optional(),
+  // Honeypot field — must be empty string for humans
+  website_url: z.string().max(0, "Bot detected").optional().or(z.literal("")),
 });
 
 export type ReservationInput = z.infer<typeof reservationSchema>;
@@ -66,6 +68,8 @@ export const contactSchema = z.object({
     .string()
     .min(10, "El mensaje debe tener al menos 10 caracteres")
     .max(2000, "El mensaje no puede exceder 2000 caracteres"),
+  // Honeypot field — must be empty string for humans
+  website_url: z.string().max(0, "Bot detected").optional().or(z.literal("")),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
@@ -76,6 +80,8 @@ export type ContactInput = z.infer<typeof contactSchema>;
 
 export const newsletterSchema = z.object({
   email: z.string().email("Email inválido"),
+  // Honeypot field — must be empty string for humans
+  website_url: z.string().max(0, "Bot detected").optional().or(z.literal("")),
 });
 
 export type NewsletterInput = z.infer<typeof newsletterSchema>;

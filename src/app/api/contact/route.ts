@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { contactSchema } from "@/lib/validations";
-import { checkRateLimit, logSecurityEvent, getClientIp, detectInjectionAttempts, sanitizeInput } from "@/lib/security";
+import { checkRateLimit, logSecurityEvent, getClientIp, detectInjectionAttempts, sanitizeInput, checkHoneypot } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +20,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    // SECURITY: Honeypot check — silently reject bots
+    if (!checkHoneypot(body)) {
+      // Return fake success to not tip off bots
+      return NextResponse.json(
+        { success: true, message: "¡Mensaje enviado! Te contactaremos pronto." },
+        { status: 201 }
+      );
+    }
 
     // SECURITY: Check for injection attempts in all string fields
     const bodyString = JSON.stringify(body);

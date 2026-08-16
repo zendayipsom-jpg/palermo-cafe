@@ -308,6 +308,22 @@ export function logSecurityEvent(
 }
 
 // ============================================
+// Honeypot Protection (anti-bot)
+// ============================================
+
+// Honeypot field name that bots automatically fill but humans leave empty
+export const HONEYPOT_FIELD = "website_url";
+
+export function checkHoneypot(body: Record<string, unknown>): boolean {
+  // If the honeypot field has any value, it's likely a bot
+  const honeypotValue = body[HONEYPOT_FIELD];
+  if (honeypotValue && typeof honeypotValue === "string" && honeypotValue.trim() !== "") {
+    return false; // Bot detected
+  }
+  return true; // Human or empty — allow
+}
+
+// ============================================
 // Content Validation (detect injection attempts)
 // ============================================
 
